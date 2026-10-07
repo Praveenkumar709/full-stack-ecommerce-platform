@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - MyShop</title>
+    <link href="https://getbootstrap.com/docs/5.1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <style>
+        .content {
+            padding: 20px;
+        }
+        .item-card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        .btn-danger, .btn-primary {
+            margin-top: 10px;
+        }
+        .form-inline {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        select, input[type="number"] {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <%- include('partials/header') %>
+
+    <!-- Main Content -->
+    <div class="container content">
+        <h1>Your Orders</h1>
+
+        <% if (orders.length > 0) { %>
+            <div class="row">
+                <% 
+                    let grandTotal = 0;
+                    orders.forEach(order => { 
+                        let orderTotal = order.product_price * order.quantity;
+                        grandTotal += orderTotal;
+                %>
+                    <div class="col-md-4">
+                        <div class="card item-card">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= order.product_name %></h5>
+                                <p class="card-text">Price: ₹<%= order.product_price %></p>
+                                <p class="card-text">Quantity: <%= order.quantity %></p>
+                                <p class="card-text">Total: ₹<%= orderTotal.toFixed(2) %></p>
+
+                                <!-- Update Order Form -->
+                                <form action="/update_order" method="POST" class="form-inline">
+                                    <input type="hidden" name="order_id" value="<%= order.id %>">
+                                    <input type="number" name="quantity" value="<%= order.quantity %>" min="1">
+                                    <select name="status">
+                                        <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                                        <option value="confirmed" <%= order.status === 'confirmed' ? 'selected' : '' %>>Confirmed</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </form>
+
+                                <!-- Delete Order Form -->
+                                <form action="/delete_order" method="POST">
+                                    <input type="hidden" name="order_id" value="<%= order.id %>">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+
+            <!-- Display Grand Total -->
+            <div class="mt-4 p-3 bg-light border rounded">
+                <h4 class="text-end">Grand Total: ₹<%= grandTotal.toFixed(2) %></h4>
+            </div>
+        <% } else { %>
+            <p class="text-muted">No orders found. Start shopping <a href="/">here</a>.</p>
+        <% } %>
+    </div>
+
+    <!-- Include Footer -->
+    <%- include('partials/footer') %>
+</body>
+</html>

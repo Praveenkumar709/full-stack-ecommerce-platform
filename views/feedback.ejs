@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - MyShop</title>
+    <link href="https://getbootstrap.com/docs/5.1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+</head>
+<body>
+    <%- include('partials/header') %>
+    <div class="container my-5">
+        <h1>Feedback</h1>
+        <p>We value your feedback. Please share your thoughts about our products and services:</p>
+        <form>
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Your Name">
+            </div>
+            <div class="mb-3">
+                <label for="feedback" class="form-label">Your Feedback</label>
+                <textarea class="form-control" id="feedback" rows="4" placeholder="Your Feedback"></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Submit Feedback</button>
+        </form>
+    </div>
+    <%- include('partials/footer') %>
+</body>
+</html>

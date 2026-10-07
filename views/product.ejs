@@ -1,0 +1,142 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js ANJU - Simple Shopping Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> <!-- Font Awesome -->
+    <style>
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .product-card img {
+            max-height: 250px;
+            object-fit: contain;
+        }
+        .product-card .btn {
+            background-color: #ff9f00;
+            color: white;
+        }
+        .product-card .btn:hover {
+            background-color: #e68900;
+        }
+        .cart-table th {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Include Header -->
+    <%- include('partials/header') %>
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4"><b>Node.js / Express JS.....Praveen - Shopping Cart with CRUD</b></h1>
+
+        <!-- Row for Products and Cart -->
+        <div class="row">
+            <!-- Product List -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-dark text-white">
+                        <h4><i class="fas fa-box"></i> Product List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row row-cols-1 row-cols-md-3 g-4">
+                            <% products.forEach(product => { %>
+                                <div class="col">
+                                    <div class="card product-card shadow-sm">
+                                        <img src="/images/<%= product.product_image %>" class="card-img-top" alt="<%= product.product_name %>">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title"><%= product.product_name %></h5>
+                                            <p class="text-danger fs-4">₹<%= product.product_price %></p>
+                                            <form method="post" action="/add_cart">
+                                                <input type="hidden" name="product_id" value="<%= product.product_id %>" />
+                                                <input type="hidden" name="product_name" value="<%= product.product_name %>" />
+                                                <input type="hidden" name="product_price" value="<%= product.product_price %>" />
+                                                <button type="submit" class="btn btn-warning"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shopping Cart -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-dark text-white">
+                        <h4><i class="fas fa-shopping-cart"></i> Shopping Cart</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped cart-table">
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Total Price</th>
+                                    <th>Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% 
+                                if(cart.length > 0) {
+                                    let total = 0;
+                                    cart.forEach(item => { 
+                                %>
+                                    <tr>
+                                        <td><%= item.product_name %></td>
+                                        <td><%= item.quantity %></td>
+                                        <td>₹<%= item.product_price %></td>
+                                        <td>₹<%= (item.quantity * item.product_price).toFixed(2) %></td>
+                                        <td><button type="button" class="btn btn-danger btn-sm" onclick="remove_item('<%= item.product_id %>')"><i class="fas fa-trash-alt"></i> Remove</button></td>
+                                    </tr>
+                                <% 
+                                        total += (item.quantity * item.product_price); 
+                                    }) 
+                                %>
+                                    <tr>
+                                        <td colspan="3" class="text-end"><b>Total</b></td>
+                                        <td>₹<%= total.toFixed(2) %></td>
+                                        <td></td>
+                                    </tr>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="5" class="text-center">No items in the cart</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                        
+                        <!-- Place Order Button -->
+                        <% if(cart.length > 0) { %>
+                            <form action="/order_confirmation" method="POST">
+                                <button class="btn btn-primary w-100 mt-3" type="submit">Place Order</button>
+                            </form>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Footer -->
+    <%- include('partials/footer') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function remove_item(item_id) {
+            if (confirm("Are you sure you want to remove this item?")) {
+                window.location.href = `/remove_item?id=${item_id}`;
+            }
+        }
+    </script>
+</body>
+</html>

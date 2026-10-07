@@ -1,0 +1,114 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+      <!-- Brand -->
+      <a class="navbar-brand" href="/">MyShop</a>
+
+      <!-- Toggler for responsive navbar -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navigation Links -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a
+              class="nav-link <%= activePage === 'home' ? 'active' : '' %>"
+              href="/"
+              >Home</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link <%= activePage === 'careers' ? 'active' : '' %>"
+              href="/careers"
+              >Careers</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link <%= activePage === 'contact' ? 'active' : '' %>"
+              href="/contact"
+              >Contact</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link <%= activePage === 'feedback' ? 'active' : '' %>"
+              href="/feedback"
+              >Feedback</a
+            >
+          </li>
+        </ul>
+
+        <!-- User Profile/Authentication Links -->
+        <ul class="navbar-nav ms-auto">
+          <% if (user) { %>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="userDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Welcome, <%= user.name %>!
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="userDropdown">
+              <li>
+                <a
+                  class="dropdown-item <%= activePage === 'dashboard' ? 'active' : '' %>"
+                  href="/dashboard"
+                  >Dashboard</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item <%= activePage === 'myorders' ? 'active' : '' %>"
+                  href="/myorders"
+                  >My Orders</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" href="/logout">Logout</a>
+              </li>
+            </ul>
+          </li>
+          <% } else { %>
+          <li class="nav-item">
+            <a
+              class="nav-link <%= activePage === 'login' ? 'active' : '' %>"
+              href="/login"
+              >Login</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link <%= activePage === 'signup' ? 'active' : '' %>"
+              href="/signup"
+              >Sign Up</a
+            >
+          </li>
+          <% } %>
+
+          <!-- Cart Icon -->
+          <li class="nav-item">
+            <a class="nav-link" href="/">
+              <i class="bi bi-cart"></i>
+              <span class="badge bg-secondary"><%= cart.length || 0 %></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

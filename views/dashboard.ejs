@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - MyShop</title>
+    <link href="https://getbootstrap.com/docs/5.1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <style>
+        .content {
+            padding: 20px;
+        }
+        .item-card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Header -->
+    <%- include('partials/header') %>
+
+    <!-- Main Content -->
+    <div class="container content">
+        <h1>Welcome to your Dashboard, <%= user.name %>!</h1>
+        <p>Email: <%= user.email %></p>
+
+        <h2>Your Recent Orders</h2>
+        <% if (orders.length > 0) { %>
+            <div class="row">
+                <% orders.forEach(order => { %>
+                    <div class="col-md-4">
+                        <div class="card item-card">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= order.product_name %></h5>
+                                <p class="card-text">Price: ₹<%= order.product_price %></p>
+                                <p class="card-text">Quantity: <%= order.quantity %></p>
+                                <p class="card-text">Total: ₹<%= (order.product_price * order.quantity).toFixed(2) %></p>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <p class="text-muted">You haven’t placed any orders yet. Browse our <a href="/">products</a> to get started!</p>
+        <% } %>
+    </div>
+
+    <!-- Include Footer -->
+    <%- include('partials/footer') %>
+</body>
+</html>
